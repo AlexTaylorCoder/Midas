@@ -3,15 +3,12 @@ import { useMutation } from "react-query"
 import { updateprofile } from "../api"
 
 function RangeSlider({upper_range}) {
-    const [slider,setSlider] = useState(upper_range)
+    const [slider,setSlider] = useState(10)
 
-    useEffect(()=> {
-        setSlider(upper_range)
-    },[])
     const {mutate} = useMutation(updateprofile)
     const rangeRef = useRef()
     useEffect(()=> {
-
+        setSlider(upper_range)
         return ()=> {
 
             if (rangeRef.current !== upper_range) mutate({upper_range: rangeRef.current})

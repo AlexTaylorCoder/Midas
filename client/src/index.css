@@ -11,6 +11,10 @@ input[type=file] {
   display: none;
 }
 
+:root {
+  overflow-x: hidden;
+}
+
 input {
   padding: 0 2px;
 }
@@ -141,11 +145,16 @@ input {
 }
 #profile-container .person-card {
   position: absolute;
-  left: calc(100vw - 500px);
   width: 500px;
   height: 800px;
   border-radius: 10px;
   background-color: whitesmoke;
+}
+#profile-container .person-card img {
+  pointer-events: none;
+}
+#profile-container .person-card:hover {
+  cursor: pointer;
 }
 #profile-container #post-carousel {
   position: relative;
@@ -234,6 +243,14 @@ input {
   border: 1px solid black;
   border-radius: 50%;
   background-color: #FFD700;
+}
+
+#profile-popup {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
 }
 
 .prof-pic {

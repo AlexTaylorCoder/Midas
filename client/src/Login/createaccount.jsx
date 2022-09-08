@@ -1,15 +1,12 @@
 import { useState, useEffect } from "react"
-import axios from "axios"
 import * as faceapi from "face-api.js";
 import { useMutation } from "react-query";
 import { createAccount } from "../api";
-import { fetchAccountWithoutPoints } from "../api";
 import { BsPlusSquareFill} from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import GoogleInfo from "./googleinfo";
 import {analyzeimage} from "../analyzeimage"
 import { Dna } from "react-loader-spinner";
-import { Data } from "@react-google-maps/api";
 // import { TurnFile } from "../turnfile";
 
 //when create account send image to backend to save. Then send back url which 

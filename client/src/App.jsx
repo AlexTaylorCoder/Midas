@@ -1,6 +1,5 @@
 import CreateAccount from "./Login/createaccount";
 import ProfileContainer from "./Home/profilecontainer";
-import Logout from "./Login/logout";
 import Login from "./Login/login";
 import { position } from "./api";
 import { gapi } from "gapi-script";
@@ -11,11 +10,11 @@ import { Routes, Route } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Ownprofile from "./Profile/ownprofile";
 import UnknownRoute from "./stylecomponents/unknownroute";
-import { Puff, Rings } from "react-loader-spinner";
+import { Puff} from "react-loader-spinner";
 import Chatcontainer from "./chat/chatcontainer";
 import Navbar from "./Home/navbar";
 import Mapcontainer from "./Map/mapcontainer";
-import { matches } from "./api";
+import Channels from "./chat/channels";
 import { useLocation } from "react-router-dom";
 
 const client_id = "645736260230-kig48kr4ae080nadjtf6tr7fr49re930.apps.googleusercontent.com"
@@ -24,7 +23,7 @@ function App() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  const {isLoading, data} = useQuery("user",authorize, {
+  const {isFetching, data} = useQuery("user",authorize, {
     refetchOnWindowFocus: false,
     onSuccess: (data)=> {
       if (data.errors) {
@@ -57,7 +56,7 @@ function App() {
   })
 
 
-  if (isLoading) {
+  if (isFetching) {
     return <Puff
     height="80"
     width="80"
@@ -72,13 +71,14 @@ function App() {
 
   return (
     <div id="app">
-      <Navbar/>
+      <Navbar id={data.id}/>
       <Routes>
+        <Route path="/channels" element={<Channels/>}/>
         <Route path="/chats" element={<Chatcontainer/>}/>
         <Route path="/signup" element={<CreateAccount/>} />
         <Route path="/login" element={<Login/>} />
         <Route path="/map" element={<Mapcontainer coords={data.coords}/>}/>
-        <Route path="/profile" element={<Ownprofile user={data}/>}/>
+        <Route path="/profile/:user_id" element={<Ownprofile user={data}/>}/>
         <Route path = "/" element={<ProfileContainer/>}/>
         <Route path = "*" element={<UnknownRoute/>}/>
       </Routes>

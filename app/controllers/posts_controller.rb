@@ -4,12 +4,12 @@ class PostsController < ApplicationController
 
         #total likes with .count
         #how wow to get total swipes?
-        current_user.avg_points.zip(params[:points]).each do |avg_coords,new_coords|
-            avg_coords[0] = new_coords[0] + avg_coords[0] / 2
-            avg_coords[1] = new_coords[1] + avg_coords[1] / 2
+        updated_points = []
+        current_user.avg_points.zip(params[:points]).each do |avg_point,new_point|
+            updated_points << (avg_point + new_point) /2
         end
 
-        User.update(avg_points:current_user.avg_points)
+        User.update(avg_points:updated_points)
     end
 
     private

@@ -1,5 +1,4 @@
-import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api"
-import { useState, useCallback } from "react";
+import { GoogleMap, useJsApiLoader } from "@react-google-maps/api"
 import { useQuery } from "react-query";
 import { mapUsers } from "../api";
 import Markercomp from "./markercomp";

@@ -1,3 +1,6 @@
 class ChannelSerializer < ActiveModel::Serializer
-  attributes :id, :message_id, :user_id
+  attributes :id
+
+  has_many :messages
+  has_many :users
 end

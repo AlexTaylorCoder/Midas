@@ -1,10 +1,23 @@
 class UsersController < ApplicationController
+    require 'open-uri'
     def create 
         #Rember to match frontend also!
-        user = User.create!(user_params)
+        byebug
+        if params[:image].is_a? String
+            url = params[:image]
+            user = User.create!(user_params_url)
+            filename = File.basename(URI.parse(url).path)
+            file = URI.open(url)
+            user.image.attach(io:file, filename: filename, content_type: 'image/jpg')
+        else
+            user = User.create!(user_params)
+        end
         #convert array of objects to 2d array 
         user.posts.create!(params.permit(:post_img,:points))
         user.swipes.create!(user_id:user.id,other_id:user.id)
+
+        
+
         session[:user_id] = user.id
         render json: user, status: :created
     end
@@ -54,22 +67,17 @@ class UsersController < ApplicationController
             usersArr_length = usersArr.length
             #Need preffered points col to compare to 
             usersArr.each_with_index do |user_range,index|
-                user_range.each do |user|
-                    init_diff_x = user.avg_points[0][0] - @user.pref_points[0][0]
-                    init_diff_y = user.avg_points[0][1] - @user.pref_points[0][1]
+                user_range.each do |user|   
+                    init_diff = user.avg_points[0] - current_user.pref_points[0]
 
-                    init_point_diff = (diff_x + diff_y) / 2 
+                    count_point_diff = init_diff / 2
 
-                    count_point_diff = init_point_diff
-
-                    user.avg_points[0][1] - user.pref_points[0][1]
-                    user.avg_points.zip(current_user.pref_points).each do |new_coords,pref_coords|
+                    user.avg_points.zip(current_user.pref_points).each do |new_point,pref_point|
                         
-                        diff_x = (new_coords[0] - pref_coords[0]).abs / (new_coords[0] + pref_coords[0] / 2)
-                        diff_y = (new_coords[1] - pref_coords[1]).abs / (new_coords[1] + pref_coords[1] / 2)
+                        diff = ((new_point - pref_point).abs / (new_point + pref_point / 2)) / 2
 
-                        point_diff = (diff_x + diff_y) / 2 
-                        count_point_diff = (point_diff + count_point_diff) / 2
+                        # point_diff = (diff_x + diff_y) / 2 
+                        count_point_diff = (diff + count_point_diff) / 2
                         # pref_coords[0] += new_coords[0] - pref_coords[0] / @user.total_likes
                         # pref_coords[1] += new_coords[0] - pref_coords[0] / @user.total_likes
                     end
@@ -79,8 +87,13 @@ class UsersController < ApplicationController
                 end
             end
             #Find 10 with lowest diff
-            lowest_diff = hash_points.sort_by{|key,value| value}.first(10).to_h
-            lowest_diff
+            lowest_diff = hash_points.sort_by{|key,value| value}.first(10)
+
+            models = []
+            lowest_diff.each do |diff_model|
+                models << diff_model[0]
+            end
+            models
         else  
             usersArr.flatten
         end
@@ -101,8 +114,9 @@ class UsersController < ApplicationController
             if count > 20
                 break
             end
+            # || created_at: Date.today..7.day
             users = User.in_range(lower_range...upper_range, origin:[user_lat,user_lng]).where(gender: current_user.pref_gender)
-            .includes(:swipes).where.not(swipes: {user_id:current_user.id}).to_a
+            .joins(:swipes).where.not(swipes: {other_id: current_user.id}).to_a
             if !users.empty?
                 usersArr << users
             end
@@ -122,4 +136,9 @@ class UsersController < ApplicationController
     def user_params
         params.permit(:first_name,:last_name,:password,:email,:phone,:birthday,:image,:googleId,:bio,:pref_gender,:gender,:avg_points)
     end
+
+    def user_params_url
+        params.permit(:first_name,:last_name,:password,:email,:phone,:birthday,:googleId,:bio,:pref_gender,:gender,:avg_points)
+    end
+
 end

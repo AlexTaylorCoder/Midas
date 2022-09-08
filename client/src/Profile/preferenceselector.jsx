@@ -2,8 +2,10 @@ import { useState, useEffect, useRef } from "react"
 import {BsGenderMale, BsGenderFemale} from 'react-icons/bs'
 import {useMutation} from "react-query"
 import { updateprofile } from "../api"
+import {useQueryClient} from "react-query"
 
 function PreferenceSelector({prefGender}) {
+    const queryClient = useQueryClient()
     const genderRef = useRef()
     const [onClick, setOnClick] = useState(false)
     const {mutate} = useMutation(updateprofile)
@@ -15,7 +17,9 @@ function PreferenceSelector({prefGender}) {
         return ()=> {
             const gender = genderRef.current ? "m" : "f"
             console.log(gender)
-            if (prefGender !== gender) mutate({pref_gender: gender})
+            if (prefGender !== gender) {
+                mutate({pref_gender: gender})
+            }
         }
     },[])
 
@@ -27,7 +31,7 @@ function PreferenceSelector({prefGender}) {
     return (
         <div id = "pref-selector">
             <input type="checkbox" id="switch" /> 
-            <label onClick={handleClick} for="switch">
+            <label onClick={handleClick} htmlFor="switch">
                 <p>
                     <BsGenderFemale/>
                     <BsGenderMale/>

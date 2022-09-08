@@ -26,6 +26,15 @@ export async function matches() {
     return response(resp)
 }
 
+export async function channels() {
+    const resp = await axios("/channels")
+    return response(resp)
+}
+
+export async function postMessage() {
+    const resp = await axios.post("/")
+}
+
 export async function updateprofile(patchObj) {
     console.log(patchObj)
     const resp = await axios.patch("/users",patchObj)

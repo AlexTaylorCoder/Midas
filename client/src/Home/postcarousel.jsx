@@ -8,7 +8,6 @@ function PostCarousel({pic,gender,name,age,posts}) {
         if (currentPost + 1 < posts.length) setCurrentPost(currentPost+1) 
     }
     return (
-        //onClick={handlePostClick} 
         <div id = "post-carousel"> 
             <img src={posts[currentPost].image_url} width="500" height="650"/>
             <div className="image-post">

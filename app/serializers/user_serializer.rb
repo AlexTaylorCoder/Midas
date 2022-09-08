@@ -7,7 +7,7 @@ class UserSerializer < ActiveModel::Serializer
   def image_url 
     if object.image.attached?
       #      Rails.application.routes.url_helpers.rails_representation_url(object.image.variant(resize: "300x300").processed, only_path: true)
-      Rails.application.routes.url_helpers.rails_blob_path(object.image, host: "local")
+      Rails.application.routes.url_helpers.rails_blob_path(object.image.variant(:thumb),host: "local")
     end
   end
   def age 
