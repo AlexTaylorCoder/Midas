@@ -12,11 +12,13 @@ import Ownprofile from "./Profile/ownprofile";
 import UnknownRoute from "./stylecomponents/unknownroute";
 import { Puff} from "react-loader-spinner";
 import Chatcontainer from "./chat/chatcontainer";
-import Navbar from "./Home/navbar";
 import Mapcontainer from "./Map/mapcontainer";
 import Channels from "./chat/channels";
 import { useLocation } from "react-router-dom";
+import Prefpoints from "./Profile/prefpoints";
+import ActionCable from 'actioncable';
 
+const cable = ActionCable.createConsumer("ws://localhost:3000/cable")
 const client_id = "645736260230-kig48kr4ae080nadjtf6tr7fr49re930.apps.googleusercontent.com"
 
 function App() {
@@ -68,18 +70,19 @@ function App() {
     visible={true}
   />
   }
-
+  console.log(data.pref_gender)
   return (
     <div id="app">
-      <Navbar id={data.id}/>
       <Routes>
+        <Route path = "/chat/:channel_id" element={<Chatcontainer cable={cable}/>}/>
         <Route path="/channels" element={<Channels/>}/>
-        <Route path="/chats" element={<Chatcontainer/>}/>
+        <Route path="/chats" element={<Chatcontainer id={data.id}/>}/>
         <Route path="/signup" element={<CreateAccount/>} />
         <Route path="/login" element={<Login/>} />
         <Route path="/map" element={<Mapcontainer coords={data.coords}/>}/>
-        <Route path="/profile/:user_id" element={<Ownprofile user={data}/>}/>
+        <Route path="/profile" element={<Ownprofile/>}/>
         <Route path = "/" element={<ProfileContainer/>}/>
+        <Route path = "/points" element={<Prefpoints/>}/>
         <Route path = "*" element={<UnknownRoute/>}/>
       </Routes>
     </div>

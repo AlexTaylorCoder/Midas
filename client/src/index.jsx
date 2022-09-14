@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import "./index.css"
-import ActionCable from 'actioncable';
+// import ActionCable from 'actioncable';
 import App from './App';
 import {ReactQueryDevtools} from "react-query/devtools"
 import { QueryClient, QueryClientProvider,  } from 'react-query'
 import { BrowserRouter } from 'react-router-dom';
 const queryClient = new QueryClient()
-const cable = ActionCable.createConsumer("ws://localhost:3000/cable")
+// const cable = ActionCable.createConsumer("ws://localhost:3000/cable")
 //Pass cable down to component that needs it
 ReactDOM.render(
     <BrowserRouter>

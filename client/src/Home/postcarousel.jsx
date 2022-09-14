@@ -1,5 +1,4 @@
 import { useState } from "react"
-
 function PostCarousel({pic,gender,name,age,posts}) {
     const [currentPost,setCurrentPost] = useState(0)
     console.log(posts)
@@ -7,9 +6,10 @@ function PostCarousel({pic,gender,name,age,posts}) {
     function handlePostClick() {
         if (currentPost + 1 < posts.length) setCurrentPost(currentPost+1) 
     }
+    console.log(posts)
     return (
         <div id = "post-carousel"> 
-            <img src={posts[currentPost].image_url} width="500" height="650"/>
+            <img src={posts[currentPost]?.image_url} width="500" height="650"/>
             <div className="image-post">
                     <div className = "image-post-header">
                     { currentPost === 0 && 

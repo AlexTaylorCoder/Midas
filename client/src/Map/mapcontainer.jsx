@@ -2,6 +2,9 @@ import { GoogleMap, useJsApiLoader } from "@react-google-maps/api"
 import { useQuery } from "react-query";
 import { mapUsers } from "../api";
 import Markercomp from "./markercomp";
+import { motion } from "framer-motion/dist/framer-motion";
+import { Menu } from "../sidebar/menu";
+import Heartloader from "../stylecomponents/heartloader";
 
 const mapKey = process.env.REACT_APP_MAPS_KEY
 
@@ -12,8 +15,8 @@ const options = {
   };
 
 const containerStyle = {
-    width: '1000px',
-    height: '1000px'
+    width: '100%',
+    height: '100vh'
   };
 
 function Mapcontainer({coords}) {
@@ -31,12 +34,18 @@ function Mapcontainer({coords}) {
 
     if (isLoading) {
         return (
-            <span>Loading...</span>
+            <Heartloader/>
         )
     }
     const markerList = data.map(user=><Markercomp key={user.id} user={user}/>)
     return isLoaded ? (
-        <div id = "map-container">
+        <>
+        <Menu/>
+        <motion.div id = "map-container"
+        animate={{
+            backgroundColor:["#000","#fff"]
+        }}
+        >
             <GoogleMap
                 options={options}
                 mapContainerStyle={containerStyle}
@@ -47,7 +56,8 @@ function Mapcontainer({coords}) {
             >
             {markerList}
             </GoogleMap>
-        </div>
+        </motion.div>
+        </>
     ) : <>Loading...</>
 }
 

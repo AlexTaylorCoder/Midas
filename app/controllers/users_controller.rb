@@ -2,7 +2,6 @@ class UsersController < ApplicationController
     require 'open-uri'
     def create 
         #Rember to match frontend also!
-        byebug
         if params[:image].is_a? String
             url = params[:image]
             user = User.create!(user_params_url)
@@ -25,6 +24,10 @@ class UsersController < ApplicationController
     def position
         current_user.update(update_location_params)
         head :no_content
+    end
+
+    def points 
+        render json: current_user, serializer: UserPointsSerializer
     end
 
     def index
@@ -54,6 +57,7 @@ class UsersController < ApplicationController
     end
 
     def destroy
+        current_user.destroy
         head :no_content
     end
 
@@ -61,8 +65,8 @@ class UsersController < ApplicationController
     private
 
     def find_face_points (usersArr)
+        # byebug
         if (!current_user.pref_points.empty?)
-
             hash_points = {}
             usersArr_length = usersArr.length
             #Need preffered points col to compare to 
@@ -96,6 +100,7 @@ class UsersController < ApplicationController
             models
         else  
             usersArr.flatten
+            # byebug
         end
     end
 
@@ -116,7 +121,14 @@ class UsersController < ApplicationController
             end
             # || created_at: Date.today..7.day
             users = User.in_range(lower_range...upper_range, origin:[user_lat,user_lng]).where(gender: current_user.pref_gender)
-            .joins(:swipes).where.not(swipes: {other_id: current_user.id}).to_a
+            .where.not(id: Swipe.where(other_id: current_user.id).pluck(:user_id)).to_a
+
+            # .joins(:swipes).where("swipes.updated_at < ? ", Date.today-14.days)
+    
+            
+            # users = User.in_range(lower_range...upper_range, origin:[user_lat,user_lng]).joins(:swipes).where("swipes.other_id != ? AND swipes.user_id != ?",current_user.id,current_user.id).to_a
+            # .joins(:swipes).where("swipes.other_id != 1",current_user.id).to_a
+
             if !users.empty?
                 usersArr << users
             end

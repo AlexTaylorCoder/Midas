@@ -1,7 +1,7 @@
 class PostsController < ApplicationController
     def create
-        Post.create!(post_params)
 
+        current_user.create!(post_params)
         #total likes with .count
         #how wow to get total swipes?
         updated_points = []
@@ -9,7 +9,11 @@ class PostsController < ApplicationController
             updated_points << (avg_point + new_point) /2
         end
 
-        User.update(avg_points:updated_points)
+        current_user.update(avg_points:updated_points)
+    end
+
+    def create_many
+        #iterate through array and create new post for each element in array
     end
 
     private

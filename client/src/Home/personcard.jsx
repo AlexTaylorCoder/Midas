@@ -2,10 +2,9 @@ import PostCarousel from "./postcarousel"
 import BioContainer from "./biocontainer"
 import { swipe } from "../api"
 import { useMutation } from "react-query"
-import { motion, useTransform, useMotionValue, useAnimation} from "framer-motion/dist/framer-motion"
+import { motion, useTransform, useMotionValue} from "framer-motion/dist/framer-motion"
 import { useState } from "react"
 function PersonCard({index,user,id,removeCard}) {
-    const animControls = useAnimation()
     const {mutate} = useMutation(swipe, {
         onSuccess: ()=> {
           console.log("Success")
@@ -23,16 +22,22 @@ function PersonCard({index,user,id,removeCard}) {
     const opacityValue = useTransform(
         motionValue,
         [-300, -150, 0, 150, 300],
-        [0, .9, 1, .9, 0]
+        [0, .95, 1, .95, 0]
+    )
+
+    const scaleValue = useTransform(
+        motionValue,
+        [-300,0,300],
+        [.8, 1, .8]
     )
 
     function handleDragEnd(event,info) {
-        if (info.offset.x > 250) {
+        if (info.offset.x > 300) {
             mutate({user_id: id,like:true})
             setDragCenter(false)
             removeCard()
         }
-        else if (info.offset.x < -250) {
+        else if (info.offset.x < -300) {
             mutate({user_id: id,like:false})
             setDragCenter(false)
             removeCard()
@@ -51,10 +56,10 @@ function PersonCard({index,user,id,removeCard}) {
             zIndex:index,
             x: motionValue,
             rotate: rotateValue,
-            opacity:opacityValue
+            opacity:opacityValue,
+            scale: scaleValue
         }}
         dragSnapToOrigin={dragCenter}
-        dragElastic={0.8}
         dragConstraints={{left:-1000,right:1000}}
         onDragEnd={handleDragEnd}
         >

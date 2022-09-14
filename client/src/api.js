@@ -16,6 +16,11 @@ export async function mapUsers() {
     return response(resp)
 }
 
+export async function prefPoints() {
+    const resp = await axios("/points")
+    return response(resp)
+}
+
 export async function fetchAccountWithoutPoints(id) {
     const resp = await axios("/users/"+id)
     return response(resp)
@@ -53,8 +58,24 @@ export async function position(coords) {
     return response(resp)
 }
 
+export async function newPost(post) {
+    const resp = await axios.post("/posts",post)
+    return response(resp)
+}
+
+export async function newMessage(content) {
+    const resp = await axios.post("/messages",content)
+    return response(resp)
+}
+
 export async function LoginDefault(details) {
     const resp = await axios.post("/login",details)
+    return response(resp)
+}
+
+export async function Chat(id) {
+    console.log(id)
+    const resp = await axios("/channels/"+id)
     return response(resp)
 }
 

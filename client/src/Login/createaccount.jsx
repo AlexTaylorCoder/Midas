@@ -3,10 +3,14 @@ import * as faceapi from "face-api.js";
 import { useMutation } from "react-query";
 import { createAccount } from "../api";
 import { BsPlusSquareFill} from "react-icons/bs";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import GoogleInfo from "./googleinfo";
 import {analyzeimage} from "../analyzeimage"
 import { Dna } from "react-loader-spinner";
+import { motion } from "framer-motion/dist/framer-motion";
+
+const placeholder = "https://i1.wp.com/ggrmlawfirm.com/wp-content/uploads/avatar-placeholder.png?fit=256%2C256&ssl=1"
+const postplaceholder = "https://www.ieee.org/content/dam/ieee-org/ieee/web/org/about/dataport-analysis-icon.png"
 // import { TurnFile } from "../turnfile";
 
 //when create account send image to backend to save. Then send back url which 
@@ -14,17 +18,19 @@ import { Dna } from "react-loader-spinner";
 function CreateAccount() {
     const navigate = useNavigate()
     const [currentPage,setCurrentPage] = useState(0)
+    const [preview,setPreview] = useState(placeholder)
+    const [postPlaceholderPreview, setPostPlaceholderPreview] = useState(postplaceholder)
 
-    const [first_name, setFirstName] = useState("aegaesg")
-    const [last_name,setLastName] = useState("azsfzs")
-    const [email,setEmail] = useState("zsfz")
-    const [password,setPassword] = useState("123")
-    const [confirmPassword, setConfirmPassword] = useState("123")
-    const [phone,setPhone] = useState("124125")
-    const [birthday,setBirthday] = useState("2022-09-08")
-    const [profLink,setProfLink] = useState(null)
-    const [image,setImage] = useState(null)
-    const [post_img, setPostImage] = useState(null)
+    const [first_name, setFirstName] = useState("")
+    const [last_name,setLastName] = useState("")
+    const [email,setEmail] = useState("")
+    const [password,setPassword] = useState("")
+    const [confirmPassword, setConfirmPassword] = useState("")
+    const [phone,setPhone] = useState("")
+    const [birthday,setBirthday] = useState("")
+    const [profLink,setProfLink] = useState()
+    const [image,setImage] = useState()
+    const [post_img, setPostImage] = useState()
     const [gender,setGender] = useState("m")
     const [prefGender,setPrefGender] = useState("m")
 
@@ -67,14 +73,6 @@ function CreateAccount() {
         setProfLink(info.imageUrl)
         setImage(info.imageUrl)
     }
-    function handleImage(e) {
-        const file = e.target.files[0]
-        setPostImage(file)
-        analyzeimage(file).then(data=> {
-            if (data) setPoints(data)
-            else {setErrorCreation("Not a valid image. Try getting closer to the camera")}
-        })
-    }
 
     function handleSubmit(e) {
         e.preventDefault()
@@ -109,7 +107,23 @@ function CreateAccount() {
             setErrorCreation("Please fill all fields")
         }
     }
+    
+    function handleImage(e) {
+        const file = e.target.files[0]
+        setPostImage(file)
+        setPostPlaceholderPreview(URL.createObjectURL(file))
+        analyzeimage(file).then(data=> {
+            if (data) setPoints(data)
+            else {setErrorCreation("Not a valid image. Try getting closer to the camera")}
+        })
+    }
 
+    function handleChangeProf(e) {
+        const file = e.target.files[0]
+        console.log(file)
+        setImage(file)
+        setPreview(URL.createObjectURL(file))
+    }
     if (isLoading) {
         return <Dna
         visible={true}
@@ -122,31 +136,35 @@ function CreateAccount() {
     }
    
     return (
-        <div id = "create-account">
+        <motion.div id = "create-account"
+        animate={{
+            backgroundColor: ['#000000','#BBA14F','#000']
+        }}
+        >
                 <div className="center-row-flex">
-                {currentPage !== 0 &&
-                        <div className="arrow-rotate">
+                {/* {currentPage !== 0 && */}
+                        <div className={`arrow-rotate ${currentPage===0 && "hide"}`}>
                             <div onClick={()=>setCurrentPage(currentPage-1)} className="arrow">
                                 <div className="arrow-top"></div>
                                 <div className="arrow-bottom"></div>
                             </div>
                         </div>
-                    }
-                <form onSubmit={handleSubmit} className="inner-form">
+                    {/* } */}
+                <motion.form onSubmit={handleSubmit} className="inner-form"
+                animate={{
+                opacity: ["0","1"],
+                borderRadius: ["20%", "20%", "50%", "50%", "20%"],
+                backgroundColor: ['#000000','#F5F5F5']
+            }}
+                >
+                    <input id="create-prof-pic" type="file" onChange={handleChangeProf}/>
+                    <label htmlFor="create-prof-pic">
+                        <img className="prof-pic" src={preview}/>
+                    </label>
+
                     {currentPage === 0 &&
                         <>
                             <h3 style={{color:"red"}}>{errorCreation}</h3>
-                            <div className="circle" onClick={()=>setNewProf(true)}> { newProf ? 
-                                <>
-                                <input required onChange={(e)=>setImage(e.target.files[0])} type="file" id="image-upload"/>
-                                <label id="image-upload-style" htmlFor = "image-upload">
-                                    <h2> Upload Image </h2>
-                                    <BsPlusSquareFill id="icon-upload-style"/>
-                                </label>
-                                </>
-                                : 
-                                <img src={profLink}/> }
-                            </div>
                             <input onChange={(e)=>setFirstName(e.target.value)} value={first_name} required placeholder="First name" type="text"/>
                             <input onChange={(e)=>setLastName(e.target.value)} value={last_name} required placeholder="Last name" type="text"/>
                             <input onChange={(e)=>setEmail(e.target.value)} value={email} required placeholder="Email" type="email"/> 
@@ -165,11 +183,10 @@ function CreateAccount() {
 
                     {currentPage === 2 &&
                         <>
-                        <div className="circle"> <h2> Images </h2> </div>
+
                             <input required onChange={handleImage} type="file" id="image-upload"/>
                                 <label id="image-upload-style" htmlFor = "image-upload">
-                                    <h2> Upload Image </h2>
-                                    <BsPlusSquareFill id="icon-upload-style"/>
+                                   <img style={{objectFit:"cover",borderRadius:"10px"}}width="300" height="200" src={postPlaceholderPreview}/>
                                 </label>
                         </>
                     }
@@ -177,7 +194,7 @@ function CreateAccount() {
                     {currentPage === 3 &&               
                     //Dropdown menu with recommended tags
                         <>
-                        <div className="circle"> <h2> Bio </h2> </div>
+                        
                             <h2>Gender</h2>
                             <select value={gender} onChange={(e)=>setGender(e.target.value)}>
                                 <option value="m">Male</option>
@@ -194,16 +211,15 @@ function CreateAccount() {
                             <input type="submit" value="Signup"/>
                         </>
                     }
-                    </form>
-
-                    { currentPage < 3 &&
-                    <div onClick={()=>setCurrentPage(currentPage+1)} className="arrow">
+                    <NavLink to={"/login"}>Login</NavLink>
+                    </motion.form>
+                    {/* <div className={`arrow-rotate ${currentPage===0 && "hide"}`}> */}
+                    <div onClick={()=>setCurrentPage(currentPage+1)} className={`arrow ${currentPage >= 3 && "hide"}`}>
                         <div className="arrow-top"></div>
                         <div className="arrow-bottom"></div>
                     </div>
-                    }
                 </div>
-        </div>  
+        </motion.div>  
     )
 }
 
