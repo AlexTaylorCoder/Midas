@@ -11,12 +11,11 @@ function PreferenceSelector({prefGender}) {
     const {mutate} = useMutation(updateprofile)
 
     useEffect(()=> {
-        if (prefGender === "m") {
-            setOnClick(true)
-        }
+        // if (prefGender === "m") {
+        //     setOnClick(true)
+        // }
         return ()=> {
             const gender = genderRef.current ? "m" : "f"
-            console.log(gender)
             if (prefGender !== gender) {
                 mutate({pref_gender: gender})
             }

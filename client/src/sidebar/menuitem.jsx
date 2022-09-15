@@ -76,7 +76,7 @@ export const MenuItem = ({ i }) => {
         {i === 2 && <IoMdPin/>}
         {i === 3 && <BsChatFill/>}
         {i === 4 && <GiBrain/>}
-        {i === 5 && (isLoading ? <RiLogoutCircleLine/> : <Logout/>)}
+        {i === 5 && (isLoading ? <RiLogoutCircleLine color="red"/> : <Logout/>)}
         </h1>
       </div>
       <div className="text-placeholder" style={style}>
@@ -86,7 +86,7 @@ export const MenuItem = ({ i }) => {
             {i === 2  && "Map"}
             {i === 3  && "Chats"}
             {i === 4  && "Points"}
-            {i === 5 && (isLoading ? <ThreeDots color="pink"/> : "Logout") }
+            {i === 5 && (isLoading ? <ThreeDots color="red"/> : "Logout") }
         </h3>
       </div>
     </motion.li>

@@ -8,7 +8,7 @@ import Heartloader from "../stylecomponents/heartloader"
 import { useEffect, useRef, useState } from "react"
 import { authorize } from "../api"
 import { useQuery, useMutation } from "react-query"
-import { newPost } from "../api"
+import { newPosts } from "../api"
 import { Menu } from "../sidebar/menu";
 import EditProfile from "./editprofile";
 
@@ -32,14 +32,9 @@ function Ownprofile() {
     const [images,setImages] = useState([]) 
     const [texts,setTexts] = useState([])
     const [current_id, setCurrentId] = useState(0)
-    const {mutate} = useMutation(newPost)
+    const {mutate,isLoading:isLoadingPost} = useMutation(newPosts)
 
 
-    useEffect(()=> {
-        return ()=> {
-            // mutate({post_img:imageRef.current,text: })
-        }
-    },[])
 
     const [isOpen, setIsOpen] = useState(false)
     function handleEdit() {
@@ -53,11 +48,17 @@ function Ownprofile() {
     function handleEditPost(e) {
         console.log(e.target.name)
     }
-    // function handleNewPost() {
-    //     mutate()
-    // }
+  
     function handleSubmit() {
-        console.log(images)
+        
+        const imageData = new FormData()
+
+        for (let image of images) {
+            console.log(image)
+            imageData.append( 'images[]',image)
+        }
+        // console.log(imageData.getAll("images"))
+        mutate(imageData)
     }
 
     function handleImage(e) {
@@ -106,14 +107,13 @@ function Ownprofile() {
             </div>
             <div className="profile-posts">
                 {data?.posts?.map(post=> 
-                        <div className="post-cover">
-                            <img key={post.id} id={post.id} style={{objectFit: "cover"}} width="400" height="400" src={post.image_url}/>
+                        <div key={post.id} className="post-cover">
+                            <img id={post.id} style={{objectFit: "cover"}} width="400" height="400" src={post.image_url}/>
                             {post?.text ? <h3>{post?.text}</h3> : <input type='text' placeholder="Caption"/> }
                         </div>
                 )}
                 {Array.apply(null, {length: 5 - data?.posts?.length}).map((e,i)=>
                     <>
-                    {/* <p>text</p> */}
                     <input onClick={(e)=>setCurrentId(()=>e.target.name)} key={i} name={i} onChange={handleImage} type="file" id={`post-upload-${i}`}/>
                         <label htmlFor={`post-upload-${i}`}>
                             <div className="post-cover" width="400" height="400">

@@ -2,7 +2,6 @@ import { useState, useEffect } from "react"
 import * as faceapi from "face-api.js";
 import { useMutation } from "react-query";
 import { createAccount } from "../api";
-import { BsPlusSquareFill} from "react-icons/bs";
 import { NavLink, useNavigate } from "react-router-dom";
 import GoogleInfo from "./googleinfo";
 import {analyzeimage} from "../analyzeimage"
@@ -36,8 +35,8 @@ function CreateAccount() {
 
     const [points,setPoints] = useState("")
 
-    const [newProf,setNewProf] = useState(false)
     const [bio,setBio] = useState("")
+
     const [googleId,setGoogleId] = useState("")
 
     const [errorCreation,setErrorCreation] = useState("")
@@ -159,7 +158,7 @@ function CreateAccount() {
                 >
                     <input id="create-prof-pic" type="file" onChange={handleChangeProf}/>
                     <label htmlFor="create-prof-pic">
-                        <img className="prof-pic" src={preview}/>
+                        <img alt={preview} className="prof-pic" src={preview}/>
                     </label>
 
                     {currentPage === 0 &&
@@ -186,7 +185,7 @@ function CreateAccount() {
 
                             <input required onChange={handleImage} type="file" id="image-upload"/>
                                 <label id="image-upload-style" htmlFor = "image-upload">
-                                   <img style={{objectFit:"cover",borderRadius:"10px"}}width="300" height="200" src={postPlaceholderPreview}/>
+                                   <img alt={postPlaceholderPreview} style={{objectFit:"cover",borderRadius:"10px"}}width="300" height="200" src={postPlaceholderPreview}/>
                                 </label>
                         </>
                     }
@@ -211,7 +210,7 @@ function CreateAccount() {
                             <input type="submit" value="Signup"/>
                         </>
                     }
-                    <NavLink to={"/login"}>Login</NavLink>
+                    {/* <NavLink to={"/login"}>Login</NavLink> */}
                     </motion.form>
                     {/* <div className={`arrow-rotate ${currentPage===0 && "hide"}`}> */}
                     <div onClick={()=>setCurrentPage(currentPage+1)} className={`arrow ${currentPage >= 3 && "hide"}`}>

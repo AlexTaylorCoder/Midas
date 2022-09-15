@@ -3,7 +3,7 @@ import ProfileContainer from "./Home/profilecontainer";
 import Login from "./Login/login";
 import { position } from "./api";
 import { gapi } from "gapi-script";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { authorize } from "./api";
 import { useQuery } from "react-query";
 import { Routes, Route } from "react-router-dom";
@@ -70,13 +70,12 @@ function App() {
     visible={true}
   />
   }
-  console.log(data.pref_gender)
+  // console.log(data?.id)
   return (
     <div id="app">
       <Routes>
-        <Route path = "/chat/:channel_id" element={<Chatcontainer cable={cable}/>}/>
+        <Route path = "/chat/:channel_id" element={<Chatcontainer id={data.id} cable={cable}/>}/>
         <Route path="/channels" element={<Channels/>}/>
-        <Route path="/chats" element={<Chatcontainer id={data.id}/>}/>
         <Route path="/signup" element={<CreateAccount/>} />
         <Route path="/login" element={<Login/>} />
         <Route path="/map" element={<Mapcontainer coords={data.coords}/>}/>

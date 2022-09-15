@@ -10,7 +10,6 @@ import { Menu } from "../sidebar/menu"
 function Prefpoints() {
  
     const {isLoading,data} = useQuery("points",prefPoints)
-    const [isPoints, setPoints] = useState(false)
 
     if (isLoading) {
         return  (
@@ -23,11 +22,6 @@ function Prefpoints() {
         )
     }
 
-    function handleToggle() {
-        setPoints(!isPoints)
-    }
-    console.log(isPoints)
-
     return (
         <>
         <Menu/>
@@ -39,10 +33,10 @@ function Prefpoints() {
         }}
             >
             <div className="pref-col-header">
-                <h1>Preffered Face</h1>
-                <button onClick={handleToggle}>Toggle Points</button>
+                <h1>Preferred Face</h1>
             </div>
                 <Canvas id="pref-canv" height="600" width="550" draw={ (context)=> drawLines(context,data.pref_points)} />
+                <Canvas id="pref-canv" height="600" width="550" draw={ (context)=> drawPoints(context,data.pref_points)} />
             </motion.div>
             <motion.div className="pref-col"
               animate={{
@@ -50,9 +44,9 @@ function Prefpoints() {
             >
                 <div className="pref-col-header">
                     <h1>Your Face</h1>
-                <button onClick={handleToggle}>Toggle Points</button>
             </div>
                 <Canvas id="self-canv" height="600" width="550" draw={(context)=> drawLines(context,data.avg_points)}/>
+                <Canvas id="self-canv" height="600" width="550" draw={(context)=> drawPoints(context,data.avg_points)}/>
             </motion.div>
         </div>
         </>
@@ -62,7 +56,6 @@ function Prefpoints() {
 
 
 function drawPoints(context,points) {
-    console.log("ran")
     for (let i = 0; i < points.length; i+=2) {
 
      
@@ -70,7 +63,8 @@ function drawPoints(context,points) {
         const y = parseFloat(points[i+1]) * 650 
 
         context.moveTo(x,y)
-        context.strokeRect(x,y,1,1)
+        context.strokeStyle = "black"
+        context.strokeRect(x,y,2,2)
     }
 }
 
@@ -102,13 +96,13 @@ function drawLines(context,points) {
         const xnext = parseFloat(points[i+2]) * 500 
         const ynext = parseFloat(points[i+3]) * 650  
 
-        if (!(Math.abs(x-xnext) > 150 || Math.abs(y-ynext) > 150)) {
+        if (!(Math.abs(x-xnext) > 100 || Math.abs(y-ynext) > 100)) {
             context.lineTo(xnext,ynext)
-            context.stroke()
+            context.stroke()   
         }
 
 
-       
+    
         context.strokeRect(x,y,1,1)
     }
     

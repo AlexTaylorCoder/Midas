@@ -65,7 +65,6 @@ class UsersController < ApplicationController
     private
 
     def find_face_points (usersArr)
-        # byebug
         if (!current_user.pref_points.empty?)
             hash_points = {}
             usersArr_length = usersArr.length

@@ -13,6 +13,10 @@ class PostsController < ApplicationController
     end
 
     def create_many
+
+        params[:images].each do |image|
+            current_user.posts.create!(post_img:image)
+        end
         #iterate through array and create new post for each element in array
     end
 

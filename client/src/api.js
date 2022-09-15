@@ -1,5 +1,8 @@
 import axios from "axios"
 
+const config = {     
+    headers: { 'content-type': 'multipart/form-data' }
+}
 export async function createAccount(formData) {
     const resp = await axios.post("/users", formData)
     return response(resp)
@@ -73,8 +76,12 @@ export async function LoginDefault(details) {
     return response(resp)
 }
 
+export async function newPosts(posts) {
+    const resp = await axios.post("/newpost",posts)
+    return response(resp)
+}
+
 export async function Chat(id) {
-    console.log(id)
     const resp = await axios("/channels/"+id)
     return response(resp)
 }

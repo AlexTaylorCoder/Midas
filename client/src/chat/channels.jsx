@@ -5,6 +5,9 @@ import { useNavigate } from "react-router-dom";
 import { Menu } from "../sidebar/menu"
 import Heartloader from "../stylecomponents/heartloader";
 
+const imagereg = /<img/g
+
+
 function Channels() {
     const navigate = useNavigate()
     const {data,isLoading,isFetching} = useQuery("channels",channels)
@@ -18,10 +21,11 @@ function Channels() {
         )
     }
     
-    function setCurrentChannel(e) {
-        console.log(e.target.id)
-        navigate("/chat/"+e.target.id)
+    function setCurrentChannel(id) {
+            navigate("/chat/"+id)
     }
+
+    console.log(data)
 
     return (
         <>
@@ -38,13 +42,18 @@ function Channels() {
                     <motion.div key={channel.id} id={channel.id} className="channel"
                     whileHover={{scale:1.05,transition:{duration:.2},cursor:"pointer"}}
                     whileTap={{scale: 0.95}}
-                    onTap={setCurrentChannel}
+                    onTap={() => setCurrentChannel(channel.id)}
                     >
                     
                         <img className="prof-pic" src={channel.image}/>
                         <h3>{channel.caption}</h3>
+                        { !imagereg.test(channel?.last_message?.text) ?
                         <h2 dangerouslySetInnerHTML={{__html:channel?.last_message?.text}}>
                         </h2>
+                        :
+                        <p>Media</p>
+
+                        }
                     </motion.div>
                     )
                 }

@@ -11,7 +11,7 @@ import { Menu } from "../sidebar/menu"
 function ProfileContainer() {
 
   const [cardDeck,setCardDeck] = useState([])
-    const {isLoading,data, isFetching} = useQuery("matches",matches, {
+    const {isLoading} = useQuery("matches",matches, {
     onSuccess: (data)=> {
       console.log(data)
       if (data.errors) {
@@ -39,10 +39,6 @@ function ProfileContainer() {
     </div>
     )
   }
-
-  // function removeCard() {
-  //   setCardsList([...data.slice(0)])
-  // }
 
     const cardList = cardDeck?.map((user,index)=><PersonCard removeCard={removeCard} index={index} id={user.id} key={user.id} user={user}/>)
 

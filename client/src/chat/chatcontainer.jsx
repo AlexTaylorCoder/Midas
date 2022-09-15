@@ -12,10 +12,10 @@ function Chatcontainer({cable,id}) {
     const {channel_id} = useParams()
     const [messages,setMessages] = useState([])
 
-    console.log(channel_id)
 
     const {data, isLoading} = useQuery(["chat",channel_id],()=>Chat(channel_id), {
         onSuccess: (data)=>{
+            scrollRef.current?.scrollIntoView()
             setMessages(data.messages)
         }
     })
@@ -30,7 +30,6 @@ function Chatcontainer({cable,id}) {
              }
             }
         )
-        console.log(channel)
         return ()=> channel.unsubscribe()
     },[])
 
@@ -38,11 +37,13 @@ function Chatcontainer({cable,id}) {
         return <span>Fetching chat content... </span>
     }
 
-    console.log(data)
+    console.log(id)
+    console.log(messages)
+
     const messageList = messages?.map(chat=> 
-            <motion.div key={chat.id} className={chat.user_id !== data.id ? "message other-message" : "message own-message"}
+            <motion.div key={chat.id} className={chat.user_id !== id ? "message other-message" : "message own-message"}
                 whileHover={{
-                    x: chat.user_id ? 50 : -50,
+                    x: chat.user_id !== id ? 25 : -25,
                     scale:1.2
                 }}
             dangerouslySetInnerHTML={{__html:chat.text}}>

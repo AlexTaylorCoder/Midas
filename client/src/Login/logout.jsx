@@ -10,15 +10,11 @@ function Logout() {
 
     const queryClient = useQueryClient()
     const navigate = useNavigate()
-    const {mutate, isLoading} = useMutation(logout, {
+    const {mutate} = useMutation(logout, {
         onSuccess: ()=>{navigate("/login"); console.log("Logout success!"); queryClient.removeQueries()},
         onError: ()=>{console.log("Failed to logout!")}
 
     })
-
-    function handleLogout() {
-        mutate()
-    }
     
     return (
         <GoogleLogout
@@ -27,7 +23,7 @@ function Logout() {
         <AiOutlineLogout onClick = {renderProps.onClick} disabled={renderProps.disabled}></AiOutlineLogout>
         )}
         onLogoutFailure={()=>console.log("Failed to logout of Google")} 
-        onLogoutSuccess={handleLogout}>
+        onLogoutSuccess={mutate}>
         </GoogleLogout>
     )
 }
