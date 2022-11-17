@@ -6,6 +6,17 @@
 
 <h3> Project Overview </h3>
 <p>
-  This is a modern dating app which leverages Face JS and location to create an algorithm which adjusts to match user preference.
-  Integrated with Google Login and Google Maps. Fully-built with SCSS and uses Framer Motion for animations. 
+This is a modern dating app which leverages Face JS built on pre-build Tensorflow models and user location to create an algorithm which adjusts to match user preference. 
 </p>
+<ol>
+    <li> Data stored to PostgreSQL database, password encryption with b-crypt. </li>
+    <li> Front and back-end synochronized using react-query.  </li>
+    <li> Developed a media and rich text live chat for matched users using action cable, and Quill JS. </li>
+    <li> Integrated with Google Login and Google Maps. </li>
+    <li> Fully-built with SCSS and Framer Motion for animations.   </li>
+
+</ol>
+
+
+
+
