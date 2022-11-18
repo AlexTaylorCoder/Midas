@@ -8,6 +8,9 @@
 <p>
 This is a modern dating app which leverages Face JS built on pre-build Tensorflow models and user location to create an algorithm which adjusts to match user preference. 
 </p>
+
+<h3>Technologies</h3>
+<h4> Ruby on Rails, React, Javascript, Ruby, HTML, SCSS, Framer-Motion, Git, FaceJS, react-query @react-google-maps/api, @react-google-login </h4>
 <ol>
     <li> Data stored to PostgreSQL database, password encryption with b-crypt. </li>
     <li> Front and back-end synochronized using react-query.  </li>
