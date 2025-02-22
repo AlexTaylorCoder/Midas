@@ -26,7 +26,7 @@ This is a modern dating app which leverages Face JS built on pre-build Tensorflo
     <li> Implement adding additional pictures to profile on frontend </li>
     <li> Speed up load times, especially on pages with images </li>
     <li> Better testing process, use selenium to create new accounts and automate testing. </li>
-    <li> Stlying updates, standardize styling to be consistent across different pages and switch font </li>
+    <li> Styling updates, standardize styling to be consistent across different pages and switch font </li>
     <li> Require user to position face in particular position to more accurately scan face. </li>
     <li> Move facial recognition technology to backend, intergate python AI technologies with rails </li>
     <li> Resize images in chats to have specific size. Can be viewed larger by clicking (similar to discord features)  </li>
